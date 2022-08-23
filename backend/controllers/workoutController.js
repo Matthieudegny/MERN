@@ -13,7 +13,7 @@ const getWorkouts = async (req, res) => {
 const getWorkout = async (req, res) => {
   const { id } = req.params
 
-// just a check of the id 
+// just a check of the id's type
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(404).json({error: 'No such workout'})
   }
@@ -43,11 +43,44 @@ const createWorkout = async (req, res) => {
 
 // delete a workout
 const deleteWorkout = async (req, res) => {
+  const { id } = req.params
+
+  // just a check of the id's type
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(404).json({error: 'No such workout'})
+  }
+
+  //_id: id its with mangoDB the way to find and delete
+  const workout = await Workout.findOneAndDelete({_id: id})
+
+  if (!workout) {
+    return res.status(400).json({error: 'No such workout'})
+  }
+
+  res.status(200).json(workout)
 
 }
 
 // update a workout
 const updateWorkout = async (req, res) => {
+
+  const { id } = req.params
+
+  // just a check of the id's type
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(404).json({error: 'No such workout'})
+  }
+
+  //second params is a new object with req.body
+  const workout = await Workout.findByIdAndUpdate({_id: id},{
+    ...req.body
+  })
+
+  if (!workout) {
+    return res.status(400).json({error: 'No such workout'})
+  }
+
+  res.status(200).json(workout)
 
 }
 
