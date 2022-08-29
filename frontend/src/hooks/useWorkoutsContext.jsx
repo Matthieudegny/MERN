@@ -1,6 +1,8 @@
 import { WorkoutsContext } from "../context/WorkoutsContext"
 import { useContext } from "react"
 
+//this hook is usefull to checked if the provider of the context used is true
+
 export const useWorkoutsContext = () => {
   const context = useContext(WorkoutsContext)
 

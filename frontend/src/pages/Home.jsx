@@ -1,12 +1,15 @@
 import { useEffect, useState } from "react"
-
+import { useWorkoutsContext } from "../hooks/useWorkoutsContext"
 //components
 import WorkoutDetails from "../components/WorkoutDetails"
 import WorkoutForm from "../components/WorkoutForm"
 
 const Home = () => {
-
-    const [workouts, setWorkouts] = useState(null)
+    //WITHOUT REDUCER+CONTEXT
+    //const [workouts, setWorkouts] = useState(null)
+    //WITH REDUCER+CONTEXT
+    //useWorkoutsContext call the useContext in its function
+    const { workouts, dispatch } = useWorkoutsContext()
 
     //a variable is create inside useEffect in order to use async,
     //because i cant write useEffect(async () => {...} )
@@ -18,17 +21,26 @@ const Home = () => {
             const json = await response.json()
 
             if(response.ok) {
-                setWorkouts(json)
+                //WITHOUT REDUCER+CONTEXT
+                //setWorkouts(json)
+                //WITH REDUCER+CONTEXT
+                dispatch({type: 'SET_WORKOUTS', payload: json})
+
             }
         }
 
         fetchWorkout()
-    },[])
+
+        //!!!
+        //dispatch is an external function, you have to declare it in the array of useEffect
+    },[dispatch])
 
     return(
         <div className="home">
            <div className="workouts">
+           {console.log(workouts)}
                 {workouts && workouts.map((workout) => (
+                    
                     <WorkoutDetails key={workout._id} workout={workout} />
                 ) )}
            </div>
